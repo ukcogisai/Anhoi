@@ -17,15 +17,7 @@
       position: relative;
     }
 
-    #particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-    }
-
+    /* ✨ Background neon công nghệ */
     .neon-background {
       position: fixed;
       top: 0;
@@ -40,8 +32,12 @@
     }
 
     @keyframes pulse {
-      0% { filter: hue-rotate(0deg) brightness(0.9); }
-      100% { filter: hue-rotate(60deg) brightness(1.2); }
+      0% {
+        filter: hue-rotate(0deg) brightness(0.9);
+      }
+      100% {
+        filter: hue-rotate(60deg) brightness(1.2);
+      }
     }
 
     .container {
@@ -124,6 +120,7 @@
       box-shadow: 0 0 20px #0ff;
     }
 
+    /* Snowflake CSS */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -137,13 +134,19 @@
     }
 
     @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <canvas id="particles"></canvas>
+  <!-- 🌌 Hiệu ứng neon phía sau -->
   <div class="neon-background"></div>
 
   <div class="container">
@@ -162,76 +165,26 @@
     </div>
   </div>
 
+  <!-- ❄ Hiệu ứng tuyết -->
   <script>
     function createSnowflake() {
       const snowflake = document.createElement("div");
       snowflake.classList.add("snowflake");
       snowflake.textContent = "❄";
+
       snowflake.style.left = Math.random() * window.innerWidth + "px";
       snowflake.style.animationDuration = (Math.random() * 3 + 2) + "s";
       snowflake.style.fontSize = (Math.random() * 10 + 10) + "px";
       snowflake.style.opacity = Math.random();
+
       document.body.appendChild(snowflake);
-      setTimeout(() => snowflake.remove(), 5000);
+
+      setTimeout(() => {
+        snowflake.remove();
+      }, 5000);
     }
+
     setInterval(createSnowflake, 200);
-  </script>
-
-  <script>
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-
-    function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const particles = [];
-    const particleCount = 80;
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1
-      });
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 255, 255, 0.7)';
-        ctx.fill();
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = 'rgba(0, 255, 255, 0.2)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-
-    animate();
   </script>
 </body>
 </html>
