@@ -122,16 +122,6 @@
   </style>
 </head>
 <body>
-<canvas id="particles" style="
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-"></canvas>
-
   <div class="container">
     <div class="fps">FPS: 41.8</div>
     <div class="profile">
@@ -169,5 +159,66 @@
 
     setInterval(createSnowflake, 200);
   </script>
+<style>
+#techno-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: radial-gradient(#0a0a1f, #000014);
+}
+</style>
+<canvas id="techno-bg"></canvas>
+<script>
+const canvas = document.getElementById("techno-bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const lines = [];
+for (let i = 0; i < 100; i++) {
+  lines.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    length: Math.random() * 50 + 50,
+    speed: Math.random() * 0.5 + 0.2,
+    opacity: Math.random() * 0.3 + 0.2,
+    width: Math.random() * 1.5 + 0.5
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  lines.forEach(l => {
+    ctx.beginPath();
+    const grad = ctx.createLinearGradient(l.x, l.y, l.x + l.length, l.y);
+    grad.addColorStop(0, `rgba(0, 255, 255, 0)`);
+    grad.addColorStop(0.5, `rgba(0, 191, 255, ${l.opacity})`);
+    grad.addColorStop(1, `rgba(0, 255, 255, 0)`);
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = l.width;
+    ctx.moveTo(l.x, l.y);
+    ctx.lineTo(l.x + l.length, l.y);
+    ctx.stroke();
+
+    l.x += l.speed;
+    if (l.x > canvas.width) l.x = -l.length;
+  });
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
 </body>
 </html>
